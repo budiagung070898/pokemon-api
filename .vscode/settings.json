@@ -1,0 +1,24 @@
+{
+  // Enable format on save
+  "editor.formatOnSave": true,
+
+  // Run code actions (like organize imports) on save
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+
+  // Optional: Limit to TypeScript/JavaScript only
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  // Optional: If using Prettier or ESLint
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
