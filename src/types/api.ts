@@ -4,3 +4,8 @@ export interface ApiListResponse<T> {
   previous: string | null;
   results: T[];
 }
+
+export interface NamedAPIResource {
+  name: string;
+  url: string;
+}

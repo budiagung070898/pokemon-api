@@ -1,4 +1,5 @@
 export const ENDPOINTS = {
   POKEMON: "/pokemon",
-  BERRY: "/berry",
+  ABILITY: "/ability",
+  MOVE: "/move",
 };

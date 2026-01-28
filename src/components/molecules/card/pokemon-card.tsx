@@ -1,6 +1,7 @@
 import { POKEMON_TYPE_GLASS } from "@/constant/pokemon-type-color";
 import { cn } from "@/lib/utils";
-import { PokemonDetail } from "@/types/pokemon-api";
+import { PokemonDetail } from "@/types/pokemon-types";
+import Link from "next/link";
 
 interface PokemonCardProps {
   pokemon: PokemonDetail;
@@ -13,7 +14,8 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const typeStyle = POKEMON_TYPE_GLASS[mainType ?? "normal"];
 
   return (
-    <div
+    <Link
+      href={`/pokemon/${pokemon.id}`}
       className={cn(
         "group relative aspect-3/4 w-full rounded-2xl",
         "transition-all duration-500 apple-ease",
@@ -102,6 +104,6 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

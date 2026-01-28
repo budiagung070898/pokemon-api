@@ -1,8 +1,3 @@
-export interface PokemonListItem {
-  name: string;
-  url: string;
-}
-
 export interface PokemonListParams {
   limit?: number;
   offset?: number;
@@ -66,6 +61,16 @@ export interface PokemonStat {
   stat: PokemonNamedResource;
 }
 
+// ===== Move =====
+export interface PokemonMove {
+  move: PokemonNamedResource;
+  version_group_details: {
+    level_learned_at: number;
+    move_learn_method: PokemonNamedResource;
+    version_group: PokemonNamedResource;
+  }[];
+}
+
 // ===== Main Pokémon Detail =====
 export interface PokemonDetail {
   id: number;
@@ -77,4 +82,17 @@ export interface PokemonDetail {
   types: PokemonType[];
   abilities: PokemonAbility[];
   stats: PokemonStat[];
+  moves: PokemonMove[];
+  held_items: {
+    item: PokemonNamedResource;
+    version_details: {
+      rarity: number;
+      version: PokemonNamedResource;
+    }[];
+  }[];
+  location_area_encounters: string;
+  game_indices: {
+    game_index: number;
+    version: PokemonNamedResource;
+  }[];
 }
