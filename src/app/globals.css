@@ -207,3 +207,9 @@
     transform: translateY(-12px);
   }
 }
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}

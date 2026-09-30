@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useMoveDetail } from "@/queries/move/use-move-detail";
+import { useMove } from "@/queries/move/use-move";
 
 type Props = {
   moveName: string | null;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function MoveDetailDialog({ moveName, onOpenChange }: Props) {
-  const { data, isLoading } = useMoveDetail(moveName);
+  const { data, isLoading } = useMove(moveName);
 
   return (
     <Dialog open={!!moveName} onOpenChange={onOpenChange}>

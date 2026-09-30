@@ -1,37 +1,30 @@
 "use client";
 
 import { ErrorState } from "@/components/common/error-state";
-import { FavoriteButton } from "@/components/pokemon/favorite-button";
-import { PokemonArtwork } from "@/components/pokemon/pokemon-artwork";
-import { PokemonTypeBadge } from "@/components/pokemon/pokemon-type-badge";
+import { PokemonStats } from "@/components/pokemon/pokemon-stats";
+import { PokemonTypeEffectiveness } from "@/components/pokemon/pokemon-type-effectiveness";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getTypeColor } from "@/constant/pokemon-type-color";
-import {
-  formatName,
-  formatPokemonId,
-  getBaseStatTotal,
-  getPokemonArtwork,
-} from "@/lib/pokemon";
+import { formatName } from "@/lib/pokemon";
 import { usePokemon } from "@/queries/pokemon/use-pokemon";
+import { usePokemonSpecies } from "@/queries/species/use-pokemon-species";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { CSSProperties } from "react";
+import { DetailSection } from "./detail-section";
+import { PokemonAbilities } from "./pokemon-abilities";
+import { PokemonEvolution } from "./pokemon-evolution";
+import { PokemonFlavorText } from "./pokemon-flavor-text";
+import { PokemonGames } from "./pokemon-games";
+import { PokemonHero } from "./pokemon-hero";
+import { PokemonMoves } from "./pokemon-moves";
+import { PokemonNeighbors } from "./pokemon-neighbors";
+import { PokemonOverview } from "./pokemon-overview";
 
-const STAT_LABELS: Record<string, string> = {
-  hp: "HP",
-  attack: "Attack",
-  defense: "Defense",
-  "special-attack": "Sp. Atk",
-  "special-defense": "Sp. Def",
-  speed: "Speed",
-};
-
-// Highest single base stat in the games (Blissey's HP).
-const MAX_BASE_STAT = 255;
-
-/** Phase 1 detail view — expanded with species, moves and evolutions in Phase 2. */
 export function PokemonDetailView({ name }: { name: string }) {
   const { data: pokemon, isPending, isError, refetch } = usePokemon(name);
+  // Species depends on the Pokémon (forms share one species), so it runs after.
+  const speciesQuery = usePokemonSpecies(pokemon?.species.name);
 
   if (isPending) return <PokemonDetailSkeleton />;
 
@@ -45,106 +38,84 @@ export function PokemonDetailView({ name }: { name: string }) {
     );
   }
 
+  const species = speciesQuery.data;
   const primaryType = pokemon.types[0]?.type.name ?? "normal";
   const typeStyle = { "--type-color": getTypeColor(primaryType).bg } as CSSProperties;
 
   return (
-    <article style={typeStyle} className="space-y-8">
-      <Link
-        href="/pokedex"
-        className="inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
-      >
-        <ArrowLeft className="size-4" aria-hidden />
-        Back to Pokédex
-      </Link>
-
-      <div className="grid items-center gap-8 md:grid-cols-2">
-        <div className="type-glow relative rounded-3xl border bg-card p-8">
-          <PokemonArtwork
-            src={getPokemonArtwork(pokemon)}
-            alt={formatName(pokemon.name)}
-            sizes="(min-width: 768px) 40vw, 90vw"
-            priority
-            className="mx-auto max-w-sm"
-          />
-        </div>
-
-        <div className="space-y-6">
-          <div className="space-y-3">
-            <p className="font-mono text-sm font-semibold text-muted-foreground">
-              {formatPokemonId(pokemon.id)}
-            </p>
-            <div className="flex items-center gap-3">
-              <h1 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl">
-                {formatName(pokemon.name)}
-              </h1>
-              <FavoriteButton name={pokemon.name} className="border" />
-            </div>
-            <div className="flex gap-2">
-              {pokemon.types.map(({ type }) => (
-                <PokemonTypeBadge key={type.name} type={type.name} size="md" />
-              ))}
-            </div>
-          </div>
-
-          <dl className="grid grid-cols-3 gap-3">
-            <Fact label="Height" value={`${pokemon.height / 10} m`} />
-            <Fact label="Weight" value={`${pokemon.weight / 10} kg`} />
-            <Fact label="Base Exp" value={pokemon.base_experience ?? "—"} />
-          </dl>
-
-          <section aria-labelledby="base-stats" className="space-y-3">
-            <h2 id="base-stats" className="text-lg font-bold text-foreground">
-              Base stats
-            </h2>
-            <dl className="space-y-2">
-              {pokemon.stats.map(({ stat, base_stat }) => (
-                <div key={stat.name} className="grid grid-cols-[5rem_2.5rem_1fr] items-center gap-3 text-sm">
-                  <dt className="text-muted-foreground">
-                    {STAT_LABELS[stat.name] ?? formatName(stat.name)}
-                  </dt>
-                  <dd className="font-semibold text-foreground tabular-nums">{base_stat}</dd>
-                  <dd aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full bg-(--type-color)"
-                      style={{ width: `${(base_stat / MAX_BASE_STAT) * 100}%` }}
-                    />
-                  </dd>
-                </div>
-              ))}
-              <div className="grid grid-cols-[5rem_2.5rem_1fr] gap-3 border-t pt-2 text-sm">
-                <dt className="font-semibold text-foreground">Total</dt>
-                <dd className="font-bold text-foreground tabular-nums">
-                  {getBaseStatTotal(pokemon.stats)}
-                </dd>
-              </div>
-            </dl>
-          </section>
+    <article style={typeStyle} className="space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Link
+          href="/pokedex"
+          className="inline-flex items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+        >
+          <ArrowLeft className="size-4" aria-hidden />
+          Back to Pokédex
+        </Link>
+        <div className="sm:w-96">
+          <PokemonNeighbors id={pokemon.id} />
         </div>
       </div>
-    </article>
-  );
-}
 
-function Fact({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="rounded-2xl border bg-card px-4 py-3">
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="text-lg font-bold text-foreground tabular-nums">{value}</dd>
-    </div>
+      <PokemonHero pokemon={pokemon} species={species} />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <DetailSection id="overview" title="Overview">
+          <PokemonOverview
+            pokemon={pokemon}
+            species={species}
+            speciesStatus={speciesQuery.status}
+          />
+        </DetailSection>
+
+        <DetailSection id="base-stats" title="Base stats">
+          <PokemonStats key={pokemon.name} stats={pokemon.stats} />
+        </DetailSection>
+
+        <DetailSection id="abilities" title="Abilities">
+          <PokemonAbilities abilities={pokemon.abilities} />
+        </DetailSection>
+
+        <DetailSection id="type-effectiveness" title="Type effectiveness">
+          <PokemonTypeEffectiveness types={pokemon.types.map(({ type }) => type.name)} />
+        </DetailSection>
+      </div>
+
+      <DetailSection id="evolution" title="Evolution chain">
+        <PokemonEvolution
+          chainUrl={species?.evolution_chain?.url}
+          currentSpecies={pokemon.species.name}
+        />
+      </DetailSection>
+
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        {species && <PokemonFlavorText species={species} />}
+        <DetailSection id="games" title="Game appearances">
+          <PokemonGames pokemon={pokemon} species={species} />
+        </DetailSection>
+      </div>
+
+      <PokemonMoves key={pokemon.name} moves={pokemon.moves} />
+    </article>
   );
 }
 
 function PokemonDetailSkeleton() {
   return (
-    <div aria-busy aria-label="Loading Pokémon" className="grid gap-8 pt-10 md:grid-cols-2">
-      <Skeleton className="aspect-square w-full rounded-3xl bg-muted" />
-      <div className="space-y-4">
-        <Skeleton className="h-4 w-16 bg-muted" />
-        <Skeleton className="h-12 w-2/3 bg-muted" />
-        <Skeleton className="h-6 w-40 rounded-full bg-muted" />
-        <Skeleton className="h-20 w-full bg-muted" />
-        <Skeleton className="h-48 w-full bg-muted" />
+    <div aria-busy aria-label="Loading Pokémon" className="space-y-6">
+      <Skeleton className="h-5 w-32 bg-muted" />
+      <div className="grid gap-6 rounded-[2rem] border bg-card p-8 md:grid-cols-2">
+        <Skeleton className="mx-auto aspect-square w-full max-w-sm rounded-full bg-muted" />
+        <div className="space-y-4 self-center">
+          <Skeleton className="h-4 w-16 bg-muted" />
+          <Skeleton className="h-14 w-2/3 bg-muted" />
+          <Skeleton className="h-6 w-40 rounded-full bg-muted" />
+          <Skeleton className="h-10 w-48 rounded-full bg-muted" />
+        </div>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Skeleton className="h-64 rounded-3xl bg-muted" />
+        <Skeleton className="h-64 rounded-3xl bg-muted" />
       </div>
     </div>
   );

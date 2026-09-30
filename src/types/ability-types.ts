@@ -11,6 +11,11 @@ export interface AbilityDetail {
     short_effect: string;
     language: NamedAPIResource;
   }[];
+  flavor_text_entries: {
+    flavor_text: string;
+    language: NamedAPIResource;
+    version_group: NamedAPIResource;
+  }[];
   pokemon: {
     is_hidden: boolean;
     slot: number;

@@ -11,6 +11,8 @@ import {
 } from "@/lib/pokemon";
 import { cn } from "@/lib/utils";
 import { usePokemon } from "@/queries/pokemon/use-pokemon";
+import { speciesQueryOptions } from "@/queries/species/use-pokemon-species";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { CSSProperties } from "react";
 import { FavoriteButton } from "./favorite-button";
@@ -27,6 +29,7 @@ interface PokemonCardProps {
 
 export function PokemonCard({ name, priority }: PokemonCardProps) {
   const { data: pokemon, isPending, isError, refetch } = usePokemon(name);
+  const queryClient = useQueryClient();
 
   if (isPending) return <PokemonCardSkeleton />;
 
@@ -47,6 +50,8 @@ export function PokemonCard({ name, priority }: PokemonCardProps) {
   return (
     <article
       style={typeStyle}
+      // Warm up the detail page's species data while the user decides.
+      onPointerEnter={() => queryClient.prefetchQuery(speciesQueryOptions(pokemon.species.name))}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-2xl border bg-card",
         "transition duration-300 hover:-translate-y-1 hover:border-(--type-color)/60 hover:shadow-xl",

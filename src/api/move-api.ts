@@ -1,7 +1,7 @@
 import { ENDPOINTS } from "@/constant/endpoint";
 import api from "@/lib/axios";
 import { ApiListResponse, NamedAPIResource } from "@/types/api";
-import { MoveDetail } from "@/types/move-types";
+import { MachineDetail, MoveDetail } from "@/types/move-types";
 import { PokemonListParams } from "@/types/pokemon-types";
 
 class MoveApi {
@@ -13,6 +13,10 @@ class MoveApi {
 
   detail(nameOrId: string | number) {
     return api.get<MoveDetail>(`${ENDPOINTS.MOVE}/${nameOrId}`);
+  }
+
+  machine(id: number) {
+    return api.get<MachineDetail>(`${ENDPOINTS.MACHINE}/${id}`);
   }
 }
 

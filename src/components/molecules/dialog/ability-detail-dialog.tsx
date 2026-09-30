@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useAbilityDetail } from "@/queries/ability/use-ability-detail";
+import { useAbility } from "@/queries/ability/use-ability";
 
 type Props = {
   abilityName: string | null;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function AbilityDetailDialog({ abilityName, onOpenChange }: Props) {
-  const { data, isLoading } = useAbilityDetail(abilityName);
+  const { data, isLoading } = useAbility(abilityName);
 
   return (
     <Dialog open={!!abilityName} onOpenChange={onOpenChange}>

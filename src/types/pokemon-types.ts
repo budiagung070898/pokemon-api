@@ -77,7 +77,12 @@ export interface PokemonDetail {
   name: string;
   height: number;
   weight: number;
-  base_experience: number;
+  base_experience: number | null;
+  species: PokemonNamedResource;
+  cries: {
+    latest: string | null;
+    legacy: string | null;
+  };
   sprites: PokemonSprites;
   types: PokemonType[];
   abilities: PokemonAbility[];

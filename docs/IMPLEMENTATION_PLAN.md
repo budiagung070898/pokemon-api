@@ -62,7 +62,7 @@ Zod schema (invalid values fall back to defaults) and updated with native
 - `/pokedex/[pokemon]` dedicated route (basic view + metadata), redirects from old `/pokemon` routes
 - `/battle` placeholder
 
-### Phase 2 — Pokémon detail
+### Phase 2 — Pokémon detail ✅
 - Shiny toggle, prev/next navigation, cry audio
 - Overview incl. species data (`/pokemon-species`): gender ratio, capture rate, growth rate, genus
 - Animated stat bars, abilities with descriptions + hidden badge
@@ -70,6 +70,9 @@ Zod schema (invalid values fall back to defaults) and updated with native
 - Evolution tree from `/evolution-chain` with branching + trigger conditions
 - Type effectiveness computed from `/type` damage relations
 - Flavor text with game/version selector, game appearances
+- Server-side prefetch + `HydrationBoundary` (content in initial HTML, real 404, flavor text as meta description)
+- Notes: TM and HM share PokéAPI's `machine` learn method, so they are one filter;
+  each row shows the game-specific item (TM24, HM03…) from `/machine`.
 
 ### Phase 2.5 — Compare Pokémon
 - `/compare?a=charizard&b=dragonite` (shareable)
