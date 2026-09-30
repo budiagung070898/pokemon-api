@@ -74,10 +74,12 @@ Zod schema (invalid values fall back to defaults) and updated with native
 - Notes: TM and HM share PokéAPI's `machine` learn method, so they are one filter;
   each row shows the game-specific item (TM24, HM03…) from `/machine`.
 
-### Phase 2.5 — Compare Pokémon
+### Phase 2.5 — Compare Pokémon ✅
 - `/compare?a=charizard&b=dragonite` (shareable)
 - Side-by-side stat table with winner highlight, type matchup both directions,
   shared/unique move comparison
+- Reusable `PokemonPicker` (searchable combobox) — reused by Team Builder and Battle
+- Entry points: navbar, "Compare" button on the detail page
 
 ### Phase 3 — Favorites & Team Builder
 - `/favorites`

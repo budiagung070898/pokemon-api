@@ -33,3 +33,19 @@ export const getBaseStatTotal = (stats: PokemonStat[]) =>
 
 export const toRomanGeneration = (generationName: string) =>
   generationName.replace("generation-", "").toUpperCase();
+
+/**
+ * Builds a matcher for a free-text Pokémon search: digits (optionally "#")
+ * match by number prefix, anything else matches by name.
+ */
+export function createPokemonMatcher(search: string) {
+  const query = search.toLowerCase().trim().replace(/^#/, "").replace(/\s+/g, "-");
+  if (!query) return () => true;
+
+  if (/^\d+$/.test(query)) {
+    const prefix = String(Number(query));
+    return (entry: { id: number }) => String(entry.id).startsWith(prefix);
+  }
+
+  return (entry: { name: string }) => entry.name.includes(query);
+}

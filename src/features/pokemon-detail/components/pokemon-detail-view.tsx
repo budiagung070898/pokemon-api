@@ -11,7 +11,7 @@ import { usePokemonSpecies } from "@/queries/species/use-pokemon-species";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { CSSProperties } from "react";
-import { DetailSection } from "./detail-section";
+import { SectionCard } from "@/components/common/section-card";
 import { PokemonAbilities } from "./pokemon-abilities";
 import { PokemonEvolution } from "./pokemon-evolution";
 import { PokemonFlavorText } from "./pokemon-flavor-text";
@@ -60,39 +60,39 @@ export function PokemonDetailView({ name }: { name: string }) {
       <PokemonHero pokemon={pokemon} species={species} />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <DetailSection id="overview" title="Overview">
+        <SectionCard id="overview" title="Overview">
           <PokemonOverview
             pokemon={pokemon}
             species={species}
             speciesStatus={speciesQuery.status}
           />
-        </DetailSection>
+        </SectionCard>
 
-        <DetailSection id="base-stats" title="Base stats">
+        <SectionCard id="base-stats" title="Base stats">
           <PokemonStats key={pokemon.name} stats={pokemon.stats} />
-        </DetailSection>
+        </SectionCard>
 
-        <DetailSection id="abilities" title="Abilities">
+        <SectionCard id="abilities" title="Abilities">
           <PokemonAbilities abilities={pokemon.abilities} />
-        </DetailSection>
+        </SectionCard>
 
-        <DetailSection id="type-effectiveness" title="Type effectiveness">
+        <SectionCard id="type-effectiveness" title="Type effectiveness">
           <PokemonTypeEffectiveness types={pokemon.types.map(({ type }) => type.name)} />
-        </DetailSection>
+        </SectionCard>
       </div>
 
-      <DetailSection id="evolution" title="Evolution chain">
+      <SectionCard id="evolution" title="Evolution chain">
         <PokemonEvolution
           chainUrl={species?.evolution_chain?.url}
           currentSpecies={pokemon.species.name}
         />
-      </DetailSection>
+      </SectionCard>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         {species && <PokemonFlavorText species={species} />}
-        <DetailSection id="games" title="Game appearances">
+        <SectionCard id="games" title="Game appearances">
           <PokemonGames pokemon={pokemon} species={species} />
-        </DetailSection>
+        </SectionCard>
       </div>
 
       <PokemonMoves key={pokemon.name} moves={pokemon.moves} />

@@ -20,6 +20,7 @@ import { ThemeToggle } from "./theme-toggle";
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Pokédex", href: "/pokedex" },
+  { label: "Compare", href: "/compare" },
   { label: "Abilities", href: "/abilities" },
   { label: "Moves", href: "/moves" },
   { label: "Battle", href: "/battle" },

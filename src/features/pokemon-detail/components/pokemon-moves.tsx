@@ -14,7 +14,7 @@ import { formatName } from "@/lib/pokemon";
 import { PokemonMove } from "@/types/pokemon-types";
 import { useState } from "react";
 import { getLearnset, getVersionGroups, LEARN_METHODS, LearnMethod } from "../lib/moves";
-import { DetailSection } from "./detail-section";
+import { SectionCard } from "@/components/common/section-card";
 import { MoveRow } from "./move-row";
 
 const INITIAL_VISIBLE = 20;
@@ -33,7 +33,7 @@ export function PokemonMoves({ moves }: { moves: PokemonMove[] }) {
   const filtered = learnset.filter((entry) => entry.method === activeMethod);
 
   return (
-    <DetailSection
+    <SectionCard
       id="moves"
       title="Moves"
       action={
@@ -86,7 +86,7 @@ export function PokemonMoves({ moves }: { moves: PokemonMove[] }) {
           versionGroup={versionGroup}
         />
       )}
-    </DetailSection>
+    </SectionCard>
   );
 }
 

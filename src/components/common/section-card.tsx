@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
-interface DetailSectionProps {
+interface SectionCardProps {
   id: string;
   title: string;
   action?: ReactNode;
@@ -9,7 +9,7 @@ interface DetailSectionProps {
   children: ReactNode;
 }
 
-export function DetailSection({ id, title, action, className, children }: DetailSectionProps) {
+export function SectionCard({ id, title, action, className, children }: SectionCardProps) {
   return (
     <section
       aria-labelledby={id}
