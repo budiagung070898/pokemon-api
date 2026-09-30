@@ -7,7 +7,7 @@ import { cleanGameText, englishOnly } from "@/lib/text";
 import { cn } from "@/lib/utils";
 import { useMachine, useMove } from "@/queries/move/use-move";
 import { MoveDetail } from "@/types/move-types";
-import { LearnsetEntry } from "../lib/moves";
+import { LearnsetEntry } from "@/lib/learnset";
 
 const CATEGORY_STYLES: Record<string, string> = {
   physical: "bg-orange-500/15 text-orange-700 dark:text-orange-300",

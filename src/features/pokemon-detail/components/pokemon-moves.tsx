@@ -13,7 +13,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatName } from "@/lib/pokemon";
 import { PokemonMove } from "@/types/pokemon-types";
 import { useState } from "react";
-import { getLearnset, getVersionGroups, LEARN_METHODS, LearnMethod } from "../lib/moves";
+import { getLearnset, getVersionGroups, LEARN_METHODS, LearnMethod } from "@/lib/learnset";
 import { SectionCard } from "@/components/common/section-card";
 import { MoveRow } from "./move-row";
 

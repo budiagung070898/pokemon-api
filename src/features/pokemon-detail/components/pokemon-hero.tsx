@@ -10,7 +10,7 @@ import { englishOnly } from "@/lib/text";
 import { PokemonDetail } from "@/types/pokemon-types";
 import { PokemonSpecies } from "@/types/species-types";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftRight, Sparkles } from "lucide-react";
+import { ArrowLeftRight, Sparkles, Swords } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { PokemonCryButton } from "./pokemon-cry-button";
@@ -81,6 +81,12 @@ export function PokemonHero({ pokemon, species }: PokemonHeroProps) {
             <Link href={`/compare?a=${pokemon.name}`}>
               <ArrowLeftRight aria-hidden />
               Compare
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="rounded-full">
+            <Link href={`/battle?pokemon=${pokemon.name}`}>
+              <Swords aria-hidden />
+              Battle
             </Link>
           </Button>
         </div>

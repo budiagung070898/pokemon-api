@@ -91,12 +91,23 @@ Zod schema (invalid values fall back to defaults) and updated with native
 - Teams auto-save to localStorage (Zustand `persist`); multiple teams act as saved slots
 - Reorder uses accessible "Move up / Move down" buttons instead of drag & drop
 
-### Phase 4 — Battle
+### Phase 4 — Battle ✅
 - `lib/battle-engine/`: `calculateDamage`, `calculateTypeEffectiveness`,
   `calculateTurnOrder`, `calculateCriticalHit`, `battleState` (reducer-style state machine)
 - Battle UI: arena, HP bars, move picker, log, result; Quick Battle (random opponent)
 - **Battle Replay**: the engine emits an event log per turn; the replay player
   re-runs those events through the same animation pipeline
+
+Implementation notes:
+- Event sourcing: `resolveTurn` is pure and appends events to `state.log`; the UI
+  derives HP, log and animation from `log.slice(0, shownCount)`. Live play,
+  "skip animation" and replay are all just changes to `shownCount`.
+- Damage: Gen V+ formula, 85–100% roll, STAB ×1.5, type multiplier, crit 1/24 ×1.5.
+  Stats at level with 0 IV/EV and neutral nature. Priority → Speed → coin flip.
+- Moves: 4 damaging level-up moves from the latest game, best move per type first.
+  Status moves, variable-power moves and self-KO moves are skipped (not simulated);
+  Struggle when no move/PP is left. Opponent AI picks best expected damage (75%).
+- URL: `/battle?pokemon=charizard&opponent=blastoise&level=50&opponentLevel=52`
 
 ### Phase 5 — Progress
 - Catch system (Poké/Great/Ultra Ball probabilities based on species capture rate)
