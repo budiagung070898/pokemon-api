@@ -1,46 +1,28 @@
 import { pokemonApi } from "@/api/pokemon-api";
-import { keepPreviousData, useQueries, useQuery } from "@tanstack/react-query";
+import { getIdFromUrl, MAX_SPECIES_ID } from "@/lib/pokemon";
+import { useQuery } from "@tanstack/react-query";
+import { pokemonKeys } from "../query-keys";
 
-const PAGE_SIZE = 12;
+export interface PokemonIndexEntry {
+  id: number;
+  name: string;
+}
 
-export const usePokemonList = (page: number) => {
-  return useQuery({
-    queryKey: ["pokemon", "list", page],
-    queryFn: async () => {
-      const { data } = await pokemonApi.list({
-        limit: PAGE_SIZE,
-        offset: (page - 1) * PAGE_SIZE,
-      });
-      return data;
+/**
+ * Full list of base Pokémon (name + id only). It is small and never changes,
+ * so it is fetched once and reused for search, filters, random picks, etc.
+ */
+export const usePokemonList = () =>
+  useQuery({
+    queryKey: pokemonKeys.list(),
+    queryFn: async (): Promise<PokemonIndexEntry[]> => {
+      const { data } = await pokemonApi.index();
+      return data.results
+        .map((pokemon) => ({
+          id: getIdFromUrl(pokemon.url),
+          name: pokemon.name,
+        }))
+        .filter((pokemon) => pokemon.id < MAX_SPECIES_ID);
     },
-    placeholderData: keepPreviousData,
+    staleTime: Infinity,
   });
-};
-
-export const usePokemonListWithDetail = (page: number) => {
-  const listQuery = usePokemonList(page);
-
-  const detailQueries = useQueries({
-    queries:
-      listQuery.data?.results.map((pokemon) => ({
-        queryKey: ["pokemon", "detail", pokemon.name],
-        queryFn: async () => {
-          const { data } = await pokemonApi.detail(pokemon.name);
-          return data;
-        },
-        enabled: !!listQuery.data,
-        staleTime: 1000 * 60 * 5, // cache detail aggressively
-      })) ?? [],
-  });
-
-  return {
-    list: listQuery.data,
-    details: detailQueries.map((q) => q.data).filter(Boolean),
-    isLoading: listQuery.isLoading || detailQueries.some((q) => q.isLoading),
-    isFetching: listQuery.isFetching,
-    pageInfo: {
-      hasNext: !!listQuery.data?.next,
-      hasPrev: !!listQuery.data?.previous,
-    },
-  };
-};

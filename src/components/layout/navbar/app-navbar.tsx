@@ -1,72 +1,138 @@
 "use client";
 
+import { Pokeball } from "@/components/common/pokeball";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
 
-const nav = [
-  { label: "Pokémon", href: "/pokemon" },
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "Pokédex", href: "/pokedex" },
   { label: "Abilities", href: "/abilities" },
   { label: "Moves", href: "/moves" },
+  { label: "Battle", href: "/battle" },
 ];
+
+const isActive = (pathname: string, href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
 
 export const AppNavbar = () => {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-white/70 dark:bg-purple-900/60 backdrop-blur-md border-b border-white/30 dark:border-white/10">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-black font-bold">
-            P
-          </div>
-          <span className="font-extrabold tracking-wide">PokéDex</span>
+    <header className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/60"
+        >
+          <Pokeball className="size-7 text-rose-500" />
+          <span className="text-lg font-black tracking-tight text-foreground">
+            Pokédex
+          </span>
         </Link>
 
-        {/* Nav */}
-        <nav className="hidden md:flex items-center gap-6">
-          {nav.map((item) => {
-            const active =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
-
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  "relative text-sm font-semibold transition-all duration-300 group",
-                  active
-                    ? "text-sky-600 dark:text-amber-300"
-                    : "text-zinc-600 hover:text-sky-600 dark:text-zinc-300 dark:hover:text-amber-300",
-                )}
-              >
-                {item.label}
-
-                {/* Active underline */}
-                {active && (
-                  <span
-                    className={cn(
-                      "pointer-events-none absolute -bottom-3 left-0 h-0.75 w-full rounded-full opacity-0 transition-opacity",
-                      "group-hover:opacity-60",
-                      active && "opacity-100",
-                      "bg-linear-to-r from-sky-500 via-cyan-400 to-sky-500",
-                      "dark:from-amber-400 dark:via-orange-400 dark:to-amber-400",
-                    )}
-                  />
-                )}
-              </Link>
-            );
-          })}
+        <nav aria-label="Main" className="hidden md:block">
+          <ul className="flex items-center gap-1">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <NavLink
+                  href={item.href}
+                  active={isActive(pathname, item.href)}
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </nav>
 
-        {/* Theme toggle */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <ThemeToggle />
+          <MobileNav pathname={pathname} />
         </div>
       </div>
     </header>
   );
 };
+
+function NavLink({
+  href,
+  active,
+  children,
+  className,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "rounded-full px-4 py-2 text-sm font-semibold outline-none transition-colors",
+        "focus-visible:ring-[3px] focus-visible:ring-ring/60",
+        active
+          ? "bg-foreground text-background"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        className,
+      )}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function MobileNav({ pathname }: { pathname: string }) {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full md:hidden"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="size-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="w-72">
+        <SheetHeader>
+          <SheetTitle>Menu</SheetTitle>
+          <SheetDescription className="sr-only">Site navigation</SheetDescription>
+        </SheetHeader>
+        <nav aria-label="Mobile" className="px-4">
+          <ul className="flex flex-col gap-1">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <SheetClose asChild>
+                  <NavLink
+                    href={item.href}
+                    active={isActive(pathname, item.href)}
+                    className="block px-4 py-3 text-base"
+                  >
+                    {item.label}
+                  </NavLink>
+                </SheetClose>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
+}

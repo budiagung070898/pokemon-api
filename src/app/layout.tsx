@@ -1,6 +1,7 @@
 import { AppNavbar } from "@/components/layout/navbar/app-navbar";
 import { cn } from "@/lib/utils";
 import ReactQueryProvider from "@/providers/react-query-provider";
+import { StoreHydration } from "@/providers/store-hydration";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -17,8 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pokemon Encyclopedia",
-  description: "Pokémon Encyclopedia built with Next.js and PokéAPI",
+  title: {
+    default: "Pokédex — Explore the Pokémon World",
+    template: "%s",
+  },
+  description:
+    "An interactive Pokédex: explore Pokémon, build teams and battle. Built with Next.js and PokéAPI.",
   icons: {
     icon: {
       url: "logo/pokemon.svg",
@@ -38,24 +43,25 @@ export default function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "min-h-screen text-foreground antialiased",
+          "min-h-screen bg-background text-foreground antialiased",
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ReactQueryProvider>
-            {/* Fixed background */}
-            <div
-              className="
-            fixed inset-0 -z-10
-            bg-linear-to-br
-            from-sky-200 via-sky-100 to-amber-100
-            dark:from-purple-950 dark:via-purple-900 dark:to-indigo-900
-          "
-            />
+            <StoreHydration />
+            <a
+              href="#main"
+              className="sr-only z-[60] rounded-md bg-foreground px-4 py-2 text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+            >
+              Skip to content
+            </a>
 
             <AppNavbar />
 
-            <main className="py-20 max-w-7xl mx-auto px-6 text-muted-foreground">
+            <main
+              id="main"
+              className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6"
+            >
               {children}
             </main>
           </ReactQueryProvider>

@@ -81,7 +81,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* CUSTOM  */
-  --background: hsl(210 100% 98%);
+  --background: hsl(220 20% 97%);
   --foreground: hsl(222 47% 11%);
 
   --card: hsl(0 0% 100%);
@@ -134,10 +134,10 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   /* CUSTOM  */
-  --background: hsl(258 60% 12%);
+  --background: hsl(228 24% 8%);
   --foreground: hsl(0 0% 98%);
 
-  --card: hsl(258 55% 18%);
+  --card: hsl(228 20% 12%);
   --card-foreground: hsl(0 0% 98%);
 
   --primary: hsl(270 95% 75%);
@@ -146,10 +146,10 @@
   --secondary: hsl(199 89% 60%);
   --secondary-foreground: hsl(0 0% 0%);
 
-  --muted: hsl(258 40% 25%);
-  --muted-foreground: hsl(258 20% 75%);
+  --muted: hsl(228 16% 18%);
+  --muted-foreground: hsl(228 12% 70%);
 
-  --border: hsl(258 30% 28%);
+  --border: hsl(228 14% 20%);
   --ring: hsl(270 95% 75%);
 }
 
@@ -178,4 +178,32 @@
 
 .apple-ease {
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Soft radial glow tinted by the `--type-color` custom property. */
+@utility type-glow {
+  background: radial-gradient(
+    circle at 50% 55%,
+    color-mix(in oklab, var(--type-color) 38%, transparent),
+    transparent 70%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }

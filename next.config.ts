@@ -1,11 +1,22 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      "raw.githubusercontent.com", // ✅ whitelist PokeAPI artwork
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        pathname: "/PokeAPI/sprites/**",
+      },
     ],
+  },
+  async redirects() {
+    return [
+      { source: "/pokemon", destination: "/pokedex", permanent: true },
+      { source: "/pokemon/:name", destination: "/pokedex/:name", permanent: true },
+    ];
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
