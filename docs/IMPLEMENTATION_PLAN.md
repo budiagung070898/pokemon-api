@@ -81,11 +81,15 @@ Zod schema (invalid values fall back to defaults) and updated with native
 - Reusable `PokemonPicker` (searchable combobox) — reused by Team Builder and Battle
 - Entry points: navbar, "Compare" button on the detail page
 
-### Phase 3 — Favorites & Team Builder
+### Phase 3 — Favorites & Team Builder ✅
 - `/favorites`
 - `/team`: up to 6, add/remove/reorder/replace, rename, save multiple teams
 - **Team Analyzer**: pure functions computing team weaknesses, resistances,
   immunities and offensive coverage from type data (unit-testable, UI-independent)
+- Level per member (slider) with stats computed at that level (`lib/pokemon-stats.ts`,
+  reused by the battle engine); "Add to team" on the detail page with toasts
+- Teams auto-save to localStorage (Zustand `persist`); multiple teams act as saved slots
+- Reorder uses accessible "Move up / Move down" buttons instead of drag & drop
 
 ### Phase 4 — Battle
 - `lib/battle-engine/`: `calculateDamage`, `calculateTypeEffectiveness`,

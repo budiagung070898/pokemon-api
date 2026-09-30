@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 interface FavoritesState {
   names: string[];
   toggleFavorite: (name: string) => void;
+  clearFavorites: () => void;
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
@@ -16,6 +17,7 @@ export const useFavoritesStore = create<FavoritesState>()(
             ? state.names.filter((favorite) => favorite !== name)
             : [...state.names, name],
         })),
+      clearFavorites: () => set({ names: [] }),
     }),
     {
       name: "pokedex-favorites",

@@ -1,5 +1,6 @@
 "use client";
 
+import { AddToTeamButton } from "@/components/pokemon/add-to-team-button";
 import { FavoriteButton } from "@/components/pokemon/favorite-button";
 import { PokemonArtwork } from "@/components/pokemon/pokemon-artwork";
 import { PokemonTypeBadge } from "@/components/pokemon/pokemon-type-badge";
@@ -75,6 +76,7 @@ export function PokemonHero({ pokemon, species }: PokemonHeroProps) {
             </Toggle>
           )}
           {cry && <PokemonCryButton src={cry} name={name} />}
+          <AddToTeamButton name={pokemon.name} />
           <Button asChild variant="outline" className="rounded-full">
             <Link href={`/compare?a=${pokemon.name}`}>
               <ArrowLeftRight aria-hidden />

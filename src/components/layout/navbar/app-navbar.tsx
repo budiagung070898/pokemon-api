@@ -21,6 +21,8 @@ const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Pokédex", href: "/pokedex" },
   { label: "Compare", href: "/compare" },
+  { label: "Team", href: "/team" },
+  { label: "Favorites", href: "/favorites" },
   { label: "Abilities", href: "/abilities" },
   { label: "Moves", href: "/moves" },
   { label: "Battle", href: "/battle" },
@@ -45,7 +47,7 @@ export const AppNavbar = () => {
           </span>
         </Link>
 
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
@@ -85,7 +87,7 @@ function NavLink({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "rounded-full px-4 py-2 text-sm font-semibold outline-none transition-colors",
+        "rounded-full px-3.5 py-2 text-sm font-semibold outline-none transition-colors",
         "focus-visible:ring-[3px] focus-visible:ring-ring/60",
         active
           ? "bg-foreground text-background"
@@ -105,7 +107,7 @@ function MobileNav({ pathname }: { pathname: string }) {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full md:hidden"
+          className="rounded-full lg:hidden"
           aria-label="Open navigation menu"
         >
           <Menu className="size-5" />

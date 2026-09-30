@@ -2,6 +2,7 @@ import { AppNavbar } from "@/components/layout/navbar/app-navbar";
 import { cn } from "@/lib/utils";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import { StoreHydration } from "@/providers/store-hydration";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -64,6 +65,7 @@ export default function RootLayout({
             >
               {children}
             </main>
+            <Toaster position="bottom-center" />
           </ReactQueryProvider>
         </ThemeProvider>
       </body>
