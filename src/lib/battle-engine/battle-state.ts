@@ -1,12 +1,13 @@
 import { calculateDamage } from "./calculate-damage";
 import { calculateTypeEffectiveness } from "./calculate-type-effectiveness";
-import { calculateTurnOrder } from "./calculate-turn-order";
+import { calculateTurnOrder, TurnAction } from "./calculate-turn-order";
 import {
   BattleEvent,
   BattleMove,
   BattlePokemon,
   BattleState,
   Combatant,
+  PlayerAction,
   RandomFn,
   Side,
   TYPELESS,
@@ -24,14 +25,23 @@ export const STRUGGLE: BattleMove = {
   maxPp: 1,
 };
 
-const toCombatant = (pokemon: BattlePokemon): Combatant => ({
+const toCombatant = (pokemon: BattlePokemon, hp = pokemon.stats.hp): Combatant => ({
   ...pokemon,
-  currentHp: pokemon.stats.hp,
+  currentHp: Math.min(Math.max(1, hp), pokemon.stats.hp),
   pp: pokemon.moves.map((move) => move.maxPp),
 });
 
-export const createBattle = (player: BattlePokemon, opponent: BattlePokemon): BattleState => ({
-  player: toCombatant(player),
+interface CreateBattleOptions {
+  /** Start the player below full HP (e.g. adventure mode carries HP over). */
+  playerHp?: number;
+}
+
+export const createBattle = (
+  player: BattlePokemon,
+  opponent: BattlePokemon,
+  { playerHp }: CreateBattleOptions = {},
+): BattleState => ({
+  player: toCombatant(player, playerHp),
   opponent: toCombatant(opponent),
   turn: 1,
   winner: null,
@@ -52,7 +62,7 @@ const pickMove = (combatant: Combatant, index: number) =>
  */
 export function resolveTurn(
   state: BattleState,
-  playerMoveIndex: number,
+  playerAction: PlayerAction,
   opponentMoveIndex: number,
   chart: TypeChart,
   random: RandomFn,
@@ -63,17 +73,34 @@ export function resolveTurn(
     player: { ...state.player, pp: [...state.player.pp] },
     opponent: { ...state.opponent, pp: [...state.opponent.pp] },
   };
+  const playerMoveIndex = playerAction.type === "move" ? playerAction.index : -1;
   const moveIndexes: Record<Side, number> = { player: playerMoveIndex, opponent: opponentMoveIndex };
   const events: BattleEvent[] = [{ kind: "turn-start", turn: state.turn }];
   let winner: Side | null = null;
 
-  const order = calculateTurnOrder(
-    [
-      { side: "player", move: pickMove(combatants.player, playerMoveIndex), speed: combatants.player.stats.speed },
-      { side: "opponent", move: pickMove(combatants.opponent, opponentMoveIndex), speed: combatants.opponent.stats.speed },
-    ],
-    random,
-  );
+  // Using an item always happens first and replaces the player's attack.
+  if (playerAction.type === "item") {
+    const player = combatants.player;
+    const amount = Math.min(playerAction.heal, player.stats.hp - player.currentHp);
+    player.currentHp += amount;
+    events.push({ kind: "item-used", side: "player", item: playerAction.item, amount, hpAfter: player.currentHp });
+  }
+
+  const opponentAction: TurnAction = {
+    side: "opponent",
+    move: pickMove(combatants.opponent, opponentMoveIndex),
+    speed: combatants.opponent.stats.speed,
+  };
+  const order =
+    playerAction.type === "move"
+      ? calculateTurnOrder(
+          [
+            { side: "player", move: pickMove(combatants.player, playerMoveIndex), speed: combatants.player.stats.speed },
+            opponentAction,
+          ],
+          random,
+        )
+      : [opponentAction];
 
   for (const { side, move } of order) {
     const attacker = combatants[side];

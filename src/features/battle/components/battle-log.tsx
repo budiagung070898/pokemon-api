@@ -4,6 +4,7 @@ import { LogLine } from "../lib/battle-view";
 const TONES: Record<NonNullable<LogLine["tone"]>, string> = {
   turn: "pt-2 text-[11px] font-bold tracking-wider text-muted-foreground uppercase",
   good: "font-bold text-rose-600 dark:text-rose-400",
+  heal: "font-bold text-emerald-600 dark:text-emerald-400",
   bad: "font-bold text-foreground",
   crit: "font-bold text-amber-600 dark:text-amber-400",
   muted: "text-muted-foreground",

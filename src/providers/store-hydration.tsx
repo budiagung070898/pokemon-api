@@ -2,6 +2,7 @@
 
 import { ACHIEVEMENTS, getUnlockedIds } from "@/lib/achievements";
 import { computeTrainerStats } from "@/lib/trainer-stats";
+import { useAdventureStore } from "@/stores/adventure-store";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { useProgressStore } from "@/stores/progress-store";
 import { useTeamStore } from "@/stores/team-store";
@@ -37,6 +38,7 @@ function announceNewAchievements() {
  */
 export function StoreHydration() {
   useEffect(() => {
+    void useAdventureStore.persist.rehydrate();
     // Achievements unlocked before tracking existed are recorded silently.
     const hydrations = stores.map((store) => store.persist.rehydrate());
     let ready = false;

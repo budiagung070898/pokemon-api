@@ -11,6 +11,9 @@ function getEffect(event: BattleEvent | null) {
   if (event?.kind === "damage" && event.effectiveness < 1) {
     return { text: "Not very effective…", className: "bg-zinc-600 text-white" };
   }
+  if (event?.kind === "item-used") {
+    return { text: `+${event.amount} HP`, className: "bg-emerald-500 text-white" };
+  }
   if (event?.kind === "miss") return { text: "Missed!", className: "bg-zinc-600 text-white" };
   if (event?.kind === "no-effect") return { text: "No effect", className: "bg-zinc-600 text-white" };
   return null;

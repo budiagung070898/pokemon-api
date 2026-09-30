@@ -22,6 +22,9 @@ function spriteAnimation(side: Side, current: BattleEvent | null) {
       ? "animate-[battle-lunge-player_0.5s_ease-in-out]"
       : "animate-[battle-lunge-opponent_0.5s_ease-in-out]";
   }
+  if (current.kind === "item-used" && current.side === side) {
+    return "animate-[battle-heal_0.8s_ease-in-out]";
+  }
   if (current.kind === "damage" && current.target === side) {
     return "animate-[battle-hit_0.6s_ease-in-out]";
   }

@@ -124,3 +124,15 @@ Implementation notes:
   `StoreHydration` subscribes to the stores and toasts newly unlocked ones once.
 - Navbar: Abilities and Moves removed (pages still reachable from the home page's
   Quick Explore); Profile is an icon button.
+
+### Bonus — Adventure mode ✅
+- `/adventure`: pick a partner (starts at Lv. 5) and climb an inverted-triangle map
+  (7 rows, like Puzzle Bobble's arcade map). After each win choose up-left or up-right;
+  right-hand stages are higher level but pay more coins. Top row = legendary bosses.
+- HP carries over between battles; coins buy potions in the shop; potions can be used
+  on the map or in battle (engine `PlayerAction` of type `item`, which takes the turn).
+- Leveling: XP = opponent level × 25, next level needs level × 5 (tuned with a small
+  simulation so the left path stays even and the right path runs 2–6 levels higher).
+  Partners only know moves learned at or below their level.
+- The map is generated from a stored seed (deterministic PRNG), so it survives reloads.
+  Losing ends the run; best stage and completed runs are kept.

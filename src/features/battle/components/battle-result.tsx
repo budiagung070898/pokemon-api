@@ -2,18 +2,19 @@ import { Button } from "@/components/ui/button";
 import { BattleState, Side } from "@/lib/battle-engine";
 import { formatName } from "@/lib/pokemon";
 import { cn } from "@/lib/utils";
-import { Play, RotateCcw, Swords } from "lucide-react";
+import { Play } from "lucide-react";
+import { ReactNode } from "react";
 import { summarizeTurns } from "../lib/battle-view";
 
 interface BattleResultProps {
   state: BattleState;
   names: Record<Side, string>;
   onReplay: () => void;
-  onRematch: () => void;
-  onNewBattle: () => void;
+  /** Buttons shown next to "Watch replay" (rematch, continue, …). */
+  actions: ReactNode;
 }
 
-export function BattleResult({ state, names, onReplay, onRematch, onNewBattle }: BattleResultProps) {
+export function BattleResult({ state, names, onReplay, actions }: BattleResultProps) {
   const won = state.winner === "player";
   const turns = summarizeTurns(state.log, names);
 
@@ -47,14 +48,7 @@ export function BattleResult({ state, names, onReplay, onRematch, onNewBattle }:
             <Play aria-hidden />
             Watch replay
           </Button>
-          <Button variant="outline" onClick={onRematch} className="rounded-full">
-            <RotateCcw aria-hidden />
-            Rematch
-          </Button>
-          <Button variant="outline" onClick={onNewBattle} className="rounded-full">
-            <Swords aria-hidden />
-            New battle
-          </Button>
+          {actions}
         </div>
       </div>
 

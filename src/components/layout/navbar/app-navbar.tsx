@@ -23,6 +23,7 @@ const NAV_ITEMS = [
   { label: "Compare", href: "/compare" },
   { label: "Team", href: "/team" },
   { label: "Battle", href: "/battle" },
+  { label: "Adventure", href: "/adventure" },
   { label: "Collection", href: "/collection" },
   { label: "Favorites", href: "/favorites" },
 ];

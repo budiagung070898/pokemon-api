@@ -56,6 +56,7 @@ export type BattleEvent =
       effectiveness: number;
       critical: boolean;
     }
+  | { kind: "item-used"; side: Side; item: string; amount: number; hpAfter: number }
   | { kind: "faint"; side: Side }
   | { kind: "battle-end"; winner: Side };
 
@@ -67,6 +68,11 @@ export interface BattleState {
   /** Every event since the battle started — the source for animation and replay. */
   log: BattleEvent[];
 }
+
+/** What the player does this turn: attack with a move, or use a healing item. */
+export type PlayerAction =
+  | { type: "move"; index: number }
+  | { type: "item"; item: string; heal: number };
 
 /** Returns a number in [0, 1). Injected so battles are deterministic in tests. */
 export type RandomFn = () => number;
