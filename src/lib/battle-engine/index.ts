@@ -4,3 +4,4 @@ export * from "./calculate-damage";
 export * from "./calculate-turn-order";
 export * from "./calculate-type-effectiveness";
 export * from "./types";
+export * from "./calculate-catch";

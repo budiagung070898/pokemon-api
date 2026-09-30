@@ -10,7 +10,8 @@ import { usePokemon } from "@/queries/pokemon/use-pokemon";
 import { usePokemonSpecies } from "@/queries/species/use-pokemon-species";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { CSSProperties } from "react";
+import { useProgressStore } from "@/stores/progress-store";
+import { CSSProperties, useEffect } from "react";
 import { SectionCard } from "@/components/common/section-card";
 import { PokemonAbilities } from "./pokemon-abilities";
 import { PokemonEvolution } from "./pokemon-evolution";
@@ -25,6 +26,13 @@ export function PokemonDetailView({ name }: { name: string }) {
   const { data: pokemon, isPending, isError, refetch } = usePokemon(name);
   // Species depends on the Pokémon (forms share one species), so it runs after.
   const speciesQuery = usePokemonSpecies(pokemon?.species.name);
+  const markSeen = useProgressStore((state) => state.markSeen);
+  const pokemonId = pokemon?.id;
+
+  // Opening a Pokémon's page counts as "seen" for the collection (syncs to localStorage).
+  useEffect(() => {
+    if (pokemonId) markSeen(pokemonId);
+  }, [pokemonId, markSeen]);
 
   if (isPending) return <PokemonDetailSkeleton />;
 

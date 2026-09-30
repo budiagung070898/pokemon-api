@@ -6,6 +6,7 @@ import {
   chooseAiMove,
   createBattle,
   resolveTurn,
+  Side,
   TypeChart,
 } from "@/lib/battle-engine";
 import { useRef, useState } from "react";
@@ -20,7 +21,17 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * many of its events the player has seen. Animating = revealing events one by
  * one; replay = revealing them again from zero; skip = revealing all at once.
  */
-export function useBattle(player: BattlePokemon, opponent: BattlePokemon, chart: TypeChart) {
+interface UseBattleOptions {
+  /** Called once when a battle ends (not on replays). */
+  onBattleEnd?: (winner: Side) => void;
+}
+
+export function useBattle(
+  player: BattlePokemon,
+  opponent: BattlePokemon,
+  chart: TypeChart,
+  { onBattleEnd }: UseBattleOptions = {},
+) {
   const [state, setState] = useState<BattleState>(() => createBattle(player, opponent));
   const [shownCount, setShownCount] = useState(0);
   const [phase, setPhase] = useState<BattlePhase>("choosing");
@@ -50,6 +61,7 @@ export function useBattle(player: BattlePokemon, opponent: BattlePokemon, chart:
 
     setState(next);
     setPhase("animating");
+    if (next.winner) onBattleEnd?.(next.winner);
     void play(next, state.log.length, next.winner ? "finished" : "choosing");
   };
 

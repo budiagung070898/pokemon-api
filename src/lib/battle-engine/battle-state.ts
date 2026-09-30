@@ -94,11 +94,13 @@ export function resolveTurn(
       continue;
     }
 
-    defender.currentHp = Math.max(0, defender.currentHp - result.damage);
+    // Report HP actually lost, like the games (no "overkill" numbers).
+    const amount = Math.min(result.damage, defender.currentHp);
+    defender.currentHp -= amount;
     events.push({
       kind: "damage",
       target,
-      amount: result.damage,
+      amount,
       hpAfter: defender.currentHp,
       effectiveness: result.effectiveness,
       critical: result.critical,

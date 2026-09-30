@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { BattlePokemon, TypeChart } from "@/lib/battle-engine";
+import { useProgressStore } from "@/stores/progress-store";
 import { FastForward, Gauge } from "lucide-react";
 import { useBattle } from "../hooks/use-battle";
 import { buildLog } from "../lib/battle-view";
@@ -9,6 +10,7 @@ import { BattleArena } from "./battle-arena";
 import { BattleLog } from "./battle-log";
 import { BattleMoves } from "./battle-moves";
 import { BattleResult } from "./battle-result";
+import { CatchPanel } from "./catch-panel";
 
 interface BattleScreenProps {
   player: BattlePokemon;
@@ -18,7 +20,10 @@ interface BattleScreenProps {
 }
 
 export function BattleScreen({ player, opponent, chart, onNewBattle }: BattleScreenProps) {
-  const battle = useBattle(player, opponent, chart);
+  const recordBattle = useProgressStore((state) => state.recordBattle);
+  const battle = useBattle(player, opponent, chart, {
+    onBattleEnd: (winner) => recordBattle(winner === "player"),
+  });
   const names = { player: player.name, opponent: opponent.name };
   const isPlaying = battle.phase === "animating" || battle.phase === "replaying";
 
@@ -71,6 +76,13 @@ export function BattleScreen({ player, opponent, chart, onNewBattle }: BattleScr
             />
           </div>
           <BattleLog lines={buildLog(battle.shownEvents, names)} />
+        </div>
+      )}
+
+      {/* Stays mounted (only hidden) during replays so throws can't be reset. */}
+      {battle.state.winner === "player" && (
+        <div hidden={battle.phase !== "finished"}>
+          <CatchPanel opponent={battle.state.opponent} />
         </div>
       )}
     </div>

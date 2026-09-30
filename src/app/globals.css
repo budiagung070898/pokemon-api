@@ -267,3 +267,16 @@
     opacity: 0;
   }
 }
+
+@keyframes ball-shake {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-22deg);
+  }
+  75% {
+    transform: rotate(22deg);
+  }
+}

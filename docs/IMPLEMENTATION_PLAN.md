@@ -109,7 +109,18 @@ Implementation notes:
   Struggle when no move/PP is left. Opponent AI picks best expected damage (75%).
 - URL: `/battle?pokemon=charizard&opponent=blastoise&level=50&opponentLevel=52`
 
-### Phase 5 — Progress
+### Phase 5 — Progress ✅
 - Catch system (Poké/Great/Ultra Ball probabilities based on species capture rate)
 - `/collection` (seen / caught, silhouettes, completion %)
 - `/profile` stats and achievements, all persisted locally
+
+Implementation notes:
+- `stores/progress-store.ts` (persisted): seen ids, caught Pokémon (ball, level, types),
+  battle record, trainer name, announced achievements.
+- "Seen" = opened a detail page or met in battle. Catching also marks as seen.
+- Catch chance: simplified Gen III formula from the species `capture_rate`
+  (Poké ×1, Great ×1.5, Ultra ×2), three shake checks, 3 throws per victory.
+- Achievements are pure definitions over trainer stats (`lib/achievements.ts`);
+  `StoreHydration` subscribes to the stores and toasts newly unlocked ones once.
+- Navbar: Abilities and Moves removed (pages still reachable from the home page's
+  Quick Explore); Profile is an icon button.

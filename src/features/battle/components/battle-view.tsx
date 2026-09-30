@@ -1,6 +1,7 @@
 "use client";
 
 import { ErrorState } from "@/components/common/error-state";
+import { useProgressStore } from "@/stores/progress-store";
 import { useState } from "react";
 import { BattleParams, useBattleParams } from "../hooks/use-battle-params";
 import { useBattlePokemon } from "../hooks/use-battle-pokemon";
@@ -52,6 +53,7 @@ function BattleSession({ params, onChange }: BattleSessionProps) {
   const player = useBattlePokemon(params.pokemon, params.level);
   const opponent = useBattlePokemon(params.opponent, params.opponentLevel);
   const { chart, isError } = useTypeChart();
+  const markSeen = useProgressStore((state) => state.markSeen);
 
   if (isError) {
     return <ErrorState description="Type data couldn't be loaded, so the battle can't start." />;
@@ -78,7 +80,13 @@ function BattleSession({ params, onChange }: BattleSessionProps) {
       opponentLevel={params.opponentLevel}
       canStart={player.status === "ready" && opponent.status === "ready" && chart !== null}
       onLevelChange={(side, level) => onChange({ [side]: level })}
-      onStart={() => setStarted(true)}
+      onStart={() => {
+        // Both Pokémon are now "seen" in the Pokédex collection.
+        if (player.status === "ready" && opponent.status === "ready") {
+          markSeen(player.pokemon.id, opponent.pokemon.id);
+        }
+        setStarted(true);
+      }}
       onBack={() => onChange({ opponent: undefined })}
     />
   );

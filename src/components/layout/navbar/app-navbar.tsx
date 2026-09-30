@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
+import { Menu, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
@@ -22,11 +22,12 @@ const NAV_ITEMS = [
   { label: "Pokédex", href: "/pokedex" },
   { label: "Compare", href: "/compare" },
   { label: "Team", href: "/team" },
-  { label: "Favorites", href: "/favorites" },
-  { label: "Abilities", href: "/abilities" },
-  { label: "Moves", href: "/moves" },
   { label: "Battle", href: "/battle" },
+  { label: "Collection", href: "/collection" },
+  { label: "Favorites", href: "/favorites" },
 ];
+
+const PROFILE_ITEM = { label: "Profile", href: "/profile" };
 
 const isActive = (pathname: string, href: string) =>
   href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -63,6 +64,20 @@ export const AppNavbar = () => {
         </nav>
 
         <div className="flex items-center gap-1">
+          <Button
+            asChild
+            variant={isActive(pathname, PROFILE_ITEM.href) ? "secondary" : "ghost"}
+            size="icon"
+            className="hidden rounded-full lg:inline-flex"
+          >
+            <Link
+              href={PROFILE_ITEM.href}
+              aria-label="Trainer profile"
+              aria-current={isActive(pathname, PROFILE_ITEM.href) ? "page" : undefined}
+            >
+              <UserRound className="size-5" />
+            </Link>
+          </Button>
           <ThemeToggle />
           <MobileNav pathname={pathname} />
         </div>
@@ -120,7 +135,7 @@ function MobileNav({ pathname }: { pathname: string }) {
         </SheetHeader>
         <nav aria-label="Mobile" className="px-4">
           <ul className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
+            {[...NAV_ITEMS, PROFILE_ITEM].map((item) => (
               <li key={item.href}>
                 <SheetClose asChild>
                   <NavLink

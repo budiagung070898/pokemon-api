@@ -1,6 +1,7 @@
 "use client";
 
 import { EmptyState } from "@/components/common/empty-state";
+import { InlineEditInput } from "@/components/common/inline-edit-input";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,7 +26,6 @@ import { useShallow } from "zustand/react/shallow";
 import { TeamAnalysis } from "./team-analysis";
 import { TeamEmptySlot } from "./team-empty-slot";
 import { TeamMemberCard } from "./team-member-card";
-import { TeamNameInput } from "./team-name-input";
 
 export function TeamView() {
   const isHydrated = useStoreHydrated(useTeamStore);
@@ -133,10 +133,11 @@ function TeamEditor({ team }: { team: Team }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <TeamNameInput
+        <InlineEditInput
           key={team.id}
-          name={team.name}
-          onRename={(name) => renameTeam(team.id, name)}
+          value={team.name}
+          label="Team name"
+          onSave={(name) => renameTeam(team.id, name)}
         />
         <div className="flex items-center gap-3">
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground" role="status">
