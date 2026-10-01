@@ -1,6 +1,6 @@
 "use client";
 
-import { Pokeball } from "@/components/common/pokeball";
+import { PikachuLogo } from "@/components/common/pikachu-logo";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -41,9 +41,9 @@ export const AppNavbar = () => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/60"
+          className="group flex items-center gap-2 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/60"
         >
-          <Pokeball className="size-7 text-rose-500" />
+          <PikachuLogo className="size-9 transition-transform group-hover:-rotate-6" />
           <span className="text-lg font-black tracking-tight text-foreground">
             Pokédex
           </span>

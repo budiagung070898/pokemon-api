@@ -25,12 +25,6 @@ export const metadata: Metadata = {
   },
   description:
     "An interactive Pokédex: explore Pokémon, build teams and battle. Built with Next.js and PokéAPI.",
-  icons: {
-    icon: {
-      url: "logo/pokemon.svg",
-      href: "/logo/pokemon.svg",
-    },
-  },
 };
 
 export default function RootLayout({
