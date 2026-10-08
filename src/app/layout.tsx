@@ -4,6 +4,7 @@ import ReactQueryProvider from "@/providers/react-query-provider";
 import { StoreHydration } from "@/providers/store-hydration";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -62,6 +63,7 @@ export default function RootLayout({
             <Toaster position="bottom-center" />
           </ReactQueryProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
